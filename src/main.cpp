@@ -28,8 +28,6 @@ public:
             riskLevel = "HIGH RISK";
         else if (!authorized)
             riskLevel = "MEDIUM RISK";
-            else if (authorised)
-                riskLevel = "NORMAL RISK";
         else
             riskLevel = "NO RISK";
     }
