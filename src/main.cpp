@@ -29,9 +29,9 @@ public:
         else if (!authorized)
             riskLevel = "MEDIUM RISK";
             else if (authorised)
-                riskLevel = "NO RISK";
+                riskLevel = "NORMAL RISK";
         else
-            riskLevel = "NORMAL";
+            riskLevel = "NO RISK";
     }
 
     void showResult() {
