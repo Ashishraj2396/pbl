@@ -47,5 +47,5 @@ This is only the basic application-logic prototype. It does not connect to a CCT
 - Ritika Jajodia
 - Saket Sharma
 - Ashish Raj
-- Saraswati More
 - Paridhi Kejriwal
+- Saraswati More
