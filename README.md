@@ -7,11 +7,13 @@ A C++17 PBL prototype for demonstrating access checks, event classification, sec
 - Menu-driven console interface.
 - Checks names against `data/authorized_personnel.txt` (case-insensitive).
 - Add and list authorized personnel.
+- Add and list authorized places/areas using `data/authorized_places.txt`.
+- Check both person authorization and location authorization.
 - Record a manually entered event with location and suspicious-object flag.
 - Classifies events using simple demo rules:
-  - **HIGH RISK** — suspicious/restricted object reported.
-  - **MEDIUM RISK** — person is not on the authorized list.
-  - **NORMAL** — person is authorized and no suspicious object is reported.
+  - **HIGH RISK** — suspicious/restricted object reported OR location is not authorized.
+  - **MEDIUM RISK** — person is not authorized, but the location is approved and no suspicious object is reported.
+  - **NORMAL** — person and location are authorized and no suspicious object is reported.
 - Displays a corresponding alert message.
 - Saves timestamped records to `events.csv`, with CSV escaping and a header.
 - View event history from the application.
@@ -21,7 +23,8 @@ A C++17 PBL prototype for demonstrating access checks, event classification, sec
 ```text
 pbl-main/
 ├── data/
-│   └── authorized_personnel.txt
+│   ├── authorized_personnel.txt
+│   └── authorized_places.txt
 ├── docs/
 │   ├── architecture.md
 │   ├── workflow.md
@@ -72,7 +75,7 @@ cctv.exe
 
 `events.csv` is created automatically after the first event. Columns:
 
-`timestamp, person, location, authorized, suspicious_object, risk_level`
+`timestamp, person, location, person_authorized, place_authorized, suspicious_object, risk_level`
 
 Do not commit real CCTV footage, personal data, or sensitive security logs to a public repository. Use synthetic/sample records for demonstrations.
 

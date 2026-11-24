@@ -11,6 +11,7 @@
 
 namespace {
 const std::string PERSONNEL_FILE = "data/authorized_personnel.txt";
+const std::string PLACES_FILE = "data/authorized_places.txt";
 const std::string EVENTS_FILE = "events.csv";
 
 std::string trim(const std::string& value) {
@@ -78,6 +79,7 @@ public:
     std::string personName;
     std::string location;
     bool authorized = false;
+    bool authorizedPlace = false;
     bool suspiciousObject = false;
     std::string riskLevel;
     std::string timestamp;
@@ -102,8 +104,27 @@ public:
         authorized = false;
     }
 
+    void checkPlaceAuthorization() {
+        std::ifstream file(PLACES_FILE);
+        if (!file) {
+            std::cerr << "Warning: Could not open " << PLACES_FILE
+                      << ". Treating the location as unauthorized.\n";
+            authorizedPlace = false;
+            return;
+        }
+        std::string place;
+        const std::string target = normalize(location);
+        while (std::getline(file, place)) {
+            if (normalize(place) == target) {
+                authorizedPlace = true;
+                return;
+            }
+        }
+        authorizedPlace = false;
+    }
+
     void calculateRisk() {
-        if (suspiciousObject) riskLevel = "HIGH RISK";
+        if (suspiciousObject || !authorizedPlace) riskLevel = "HIGH RISK";
         else if (!authorized) riskLevel = "MEDIUM RISK";
         else riskLevel = "NORMAL";
     }
@@ -113,7 +134,8 @@ public:
                   << "Timestamp          : " << timestamp << '\n'
                   << "Person             : " << personName << '\n'
                   << "Location           : " << location << '\n'
-                  << "Authorization      : " << (authorized ? "AUTHORIZED" : "NOT AUTHORIZED") << '\n'
+                  << "Person access      : " << (authorized ? "AUTHORIZED" : "NOT AUTHORIZED") << '\n'
+                  << "Place access       : " << (authorizedPlace ? "AUTHORIZED" : "RESTRICTED / NOT AUTHORIZED") << '\n'
                   << "Suspicious object  : " << (suspiciousObject ? "YES" : "NO") << '\n'
                   << "Risk level         : " << riskLevel << '\n';
 
@@ -138,12 +160,13 @@ public:
         }
 
         if (needsHeader)
-            file << "timestamp,person,location,authorized,suspicious_object,risk_level\n";
+            file << "timestamp,person,location,person_authorized,place_authorized,suspicious_object,risk_level\n";
 
         file << csvEscape(timestamp) << ','
              << csvEscape(personName) << ','
              << csvEscape(location) << ','
              << (authorized ? "YES" : "NO") << ','
+             << (authorizedPlace ? "YES" : "NO") << ','
              << (suspiciousObject ? "YES" : "NO") << ','
              << csvEscape(riskLevel) << '\n';
         return static_cast<bool>(file);
@@ -158,6 +181,7 @@ void recordEvent() {
     event.timestamp = currentTimestamp();
 
     event.checkAuthorization();
+    event.checkPlaceAuthorization();
     event.calculateRisk();
     event.showResult();
 
@@ -205,6 +229,42 @@ void addPersonnel() {
     std::cout << "Added " << name << " to the authorized list.\n";
 }
 
+void listAuthorizedPlaces() {
+    std::ifstream file(PLACES_FILE);
+    if (!file) {
+        std::cerr << "Could not open location file: " << PLACES_FILE << '\n';
+        return;
+    }
+    std::cout << "\n======= AUTHORIZED PLACES =======\n";
+    std::string place;
+    int count = 0;
+    while (std::getline(file, place)) {
+        place = trim(place);
+        if (!place.empty()) std::cout << ++count << ". " << place << '\n';
+    }
+    if (count == 0) std::cout << "No authorized places found.\n";
+    std::cout << "Total: " << count << "\n=================================\n";
+}
+
+void addAuthorizedPlace() {
+    const std::string place = readRequiredLine("Enter place/area to authorize: ");
+    std::ifstream input(PLACES_FILE);
+    std::string existing;
+    while (std::getline(input, existing)) {
+        if (normalize(existing) == normalize(place)) {
+            std::cout << "This place is already in the authorized list.\n";
+            return;
+        }
+    }
+    std::ofstream output(PLACES_FILE, std::ios::app);
+    if (!output) {
+        std::cerr << "Could not update " << PLACES_FILE << ".\n";
+        return;
+    }
+    output << place << '\n';
+    std::cout << "Added " << place << " to the authorized places list.\n";
+}
+
 void viewEventLog() {
     std::ifstream file(EVENTS_FILE);
     if (!file) {
@@ -226,8 +286,10 @@ void showMenu() {
               << "1. Record a CCTV event (manual demo)\n"
               << "2. View authorized personnel\n"
               << "3. Add authorized personnel\n"
-              << "4. View event history\n"
-              << "5. Exit\n"
+              << "4. View authorized places\n"
+              << "5. Add authorized place\n"
+              << "6. View event history\n"
+              << "7. Exit\n"
               << "Choose an option: ";
 }
 } // namespace
@@ -241,12 +303,14 @@ int main() {
         if (choice == "1") recordEvent();
         else if (choice == "2") listPersonnel();
         else if (choice == "3") addPersonnel();
-        else if (choice == "4") viewEventLog();
-        else if (choice == "5") {
+        else if (choice == "4") listAuthorizedPlaces();
+        else if (choice == "5") addAuthorizedPlace();
+        else if (choice == "6") viewEventLog();
+        else if (choice == "7") {
             std::cout << "System closed. Thank you.\n";
             break;
         } else {
-            std::cout << "Invalid choice. Enter a number from 1 to 5.\n";
+            std::cout << "Invalid choice. Enter a number from 1 to 7.\n";
         }
     }
     return 0;

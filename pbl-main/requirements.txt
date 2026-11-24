@@ -1,0 +1,2 @@
+# No third-party dependencies for the current C++17 prototype.
+# Future Python AI integration dependencies should be listed here after implementation.

@@ -1,0 +1,22 @@
+# Compiled binaries
+cctv
+cctv.exe
+pbl
+pbl.exe
+*.o
+*.out
+
+# Runtime data / logs
+events.csv
+
+# macOS / IDE
+.DS_Store
+*.dSYM/
+.vscode/
+
+# Python (for future AI integration)
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
