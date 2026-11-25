@@ -24,3 +24,6 @@ venv/
 __pycache__/
 *.pyc
 yolo11n.pt
+cctv
+detection_output.jpg
+data/images/
