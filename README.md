@@ -6,8 +6,8 @@ A C++17 PBL prototype for demonstrating access checks, event classification, sec
 
 - Menu-driven console interface.
 - Checks names against `data/authorized_personnel.txt` (case-insensitive).
-- Add and list authorized personnel.
-- Add and list authorized places/areas using `data/authorized_places.txt`.
+- Add, list, and delete authorized personnel (deletion requires confirmation).
+- Add, list, and delete authorized places/areas using `data/authorized_places.txt` (deletion requires confirmation).
 - Check both person authorization and location authorization.
 - Record a manually entered event with location and suspicious-object flag.
 - Classifies events using simple demo rules:
@@ -62,14 +62,14 @@ cctv.exe
 
 ## How to use
 
-1. Select **2** to view the authorized-personnel list.
-2. Select **3** to add an authorized person.
-3. Select **1** to record a demo event.
-4. Enter the person's name and area/location.
-5. Answer whether a suspicious/restricted object was reported.
+1. Select **2** to view authorized personnel or **3** to add a person.
+2. Select **8** to delete an authorized person: choose the numbered entry and confirm.
+3. Select **4** to view authorized places or **5** to add an area.
+4. Select **9** to delete an authorized place: choose the numbered entry and confirm.
+5. Select **1** to record a demo event; enter the person's name and area/location, then answer the suspicious-object prompt.
 6. Review the risk result and alert.
-7. Select **4** to view event history. The records are also stored in `events.csv`.
-8. Select **5** to exit.
+7. Select **6** to view event history. The records are also stored in `events.csv`.
+8. Select **7** to exit.
 
 ## Event data
 

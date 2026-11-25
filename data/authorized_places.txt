@@ -1,8 +1,4 @@
 Main Gate
 Reception
 Admin Block
-Teacher Parking Area
-BOYS Hostel 1
-Boys Hostel 2
-Girls Hostel 
-Dispensary
+Parking Area

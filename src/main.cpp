@@ -265,6 +265,53 @@ void addAuthorizedPlace() {
     std::cout << "Added " << place << " to the authorized places list.\n";
 }
 
+
+void deleteEntry(const std::string& path, const std::string& label) {
+    std::ifstream input(path);
+    if (!input) {
+        std::cerr << "Could not open file: " << path << '\n';
+        return;
+    }
+    std::vector<std::string> entries;
+    std::string line;
+    while (std::getline(input, line)) {
+        line = trim(line);
+        if (!line.empty()) entries.push_back(line);
+    }
+    input.close();
+    if (entries.empty()) {
+        std::cout << "No " << label << " entries to delete.\n";
+        return;
+    }
+    std::cout << "\n======= " << label << " =======\n";
+    for (std::size_t i = 0; i < entries.size(); ++i)
+        std::cout << (i + 1) << ". " << entries[i] << '\n';
+    std::cout << "Enter the number to delete (0 to cancel): ";
+    std::string raw;
+    std::getline(std::cin, raw);
+    raw = trim(raw);
+    if (raw == "0") { std::cout << "Deletion cancelled.\n"; return; }
+    std::size_t index = 0;
+    try { index = static_cast<std::size_t>(std::stoul(raw)); }
+    catch (...) { std::cout << "Invalid selection.\n"; return; }
+    if (index < 1 || index > entries.size()) {
+        std::cout << "Invalid selection.\n"; return;
+    }
+    const std::string selected = entries[index - 1];
+    if (!readYesNo("Delete '" + selected + "'? Confirm")) {
+        std::cout << "Deletion cancelled.\n"; return;
+    }
+    std::ofstream output(path, std::ios::trunc);
+    if (!output) { std::cerr << "Could not write to file: " << path << '\n'; return; }
+    for (std::size_t i = 0; i < entries.size(); ++i)
+        if (i != index - 1) output << entries[i] << '\n';
+    if (!output) { std::cerr << "Error while saving file.\n"; return; }
+    std::cout << "Deleted " << selected << " successfully.\n";
+}
+
+void deletePersonnel() { deleteEntry(PERSONNEL_FILE, "AUTHORIZED PERSONNEL"); }
+void deleteAuthorizedPlace() { deleteEntry(PLACES_FILE, "AUTHORIZED PLACES"); }
+
 void viewEventLog() {
     std::ifstream file(EVENTS_FILE);
     if (!file) {
@@ -289,7 +336,9 @@ void showMenu() {
               << "4. View authorized places\n"
               << "5. Add authorized place\n"
               << "6. View event history\n"
-              << "7. Exit\n"
+              << "7. Delete authorized personnel\n"
+              << "8. Delete authorized place\n"
+              << "9. Exit\n"
               << "Choose an option: ";
 }
 } // namespace
@@ -306,11 +355,13 @@ int main() {
         else if (choice == "4") listAuthorizedPlaces();
         else if (choice == "5") addAuthorizedPlace();
         else if (choice == "6") viewEventLog();
-        else if (choice == "7") {
+        else if (choice == "7") deletePersonnel();
+        else if (choice == "8") deleteAuthorizedPlace();
+        else if (choice == "9") {
             std::cout << "System closed. Thank you.\n";
             break;
         } else {
-            std::cout << "Invalid choice. Enter a number from 1 to 7.\n";
+            std::cout << "Invalid choice. Enter a number from 1 to 9.\n";
         }
     }
     return 0;
