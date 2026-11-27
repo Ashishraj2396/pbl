@@ -46,3 +46,5 @@ README_backup.md
 
 /data/videos/
 /video_results/
+
+/data/dashboard.db*

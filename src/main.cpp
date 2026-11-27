@@ -816,7 +816,8 @@ void showMenu() {
               << "12. View AI review history\n"
               << "13. Analyze sample video\n"
               << "14. View video analysis reports\n"
-              << "15. Exit\n"
+              << "15. Launch GUI Dashboard\n"
+              << "16. Exit\n"
               << "Choose an option: ";
 }
 
@@ -856,10 +857,36 @@ int main() {
         else if (choice == "13") analyzeSampleVideo();
         else if (choice == "14") viewVideoReports();
         else if (choice == "15") {
+            std::cout << "Preparing dashboard database...\n" << std::flush;
+
+            int status = std::system(
+                "./.venv/bin/python scripts/import_reports.py"
+            );
+
+            if (status != 0) {
+                std::cerr << "Report import failed.\n";
+                continue;
+            }
+
+            std::cout << "Launching GUI Dashboard...\n"
+                      << "Open http://127.0.0.1:8501\n"
+                      << std::flush;
+
+            status = std::system(
+                "./.venv/bin/python -m streamlit run dashboard.py "
+                "--server.address 127.0.0.1 "
+                "--server.port 8501 "
+                "--browser.gatherUsageStats false"
+            );
+
+            if (status != 0)
+                std::cerr << "Dashboard stopped or failed.\n";
+        }
+        else if (choice == "16") {
             std::cout << "System closed. Thank you.\n";
             break;
         } else {
-            std::cout << "Invalid choice. Enter a number from 1 to 15.\n";
+            std::cout << "Invalid choice. Enter a number from 1 to 16.\n";
         }
     }
     return 0;

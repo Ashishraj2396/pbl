@@ -333,3 +333,58 @@ The module does not perform identity recognition,
 individual tracking or live CCTV monitoring.
 
 Use only synthetic or approved demonstration videos.
+
+## GUI Dashboard and SQLite Database
+
+The system now provides a 16-option C++ menu.
+
+### New menu options
+
+- Option 15: Launch GUI Dashboard.
+- Option 16: Exit.
+
+### Dashboard features
+
+- Professional dark-blue interface.
+- System overview and report statistics.
+- Interactive image detection charts.
+- Recorded video analysis reports.
+- Human review history.
+- Report selection and data tables.
+- Manual report refresh button.
+- Local SQLite database integration.
+- Duplicate prevention for repeated report imports.
+
+### Dashboard technologies
+
+- Streamlit
+- Pandas
+- Plotly
+- SQLite
+
+### New project files
+
+- dashboard.py
+- scripts/database.py
+- scripts/import_reports.py
+- .streamlit/config.toml
+
+### Launch the dashboard
+
+Run the C++ application and select option 15.
+
+Alternatively, run these commands:
+
+    python scripts/import_reports.py
+    python -m streamlit run dashboard.py
+
+Open http://127.0.0.1:8501 in a browser.
+
+### Privacy and limitations
+
+The dashboard runs locally.
+The SQLite database is excluded from Git tracking.
+Usage telemetry is disabled in the project configuration.
+
+Detection statistics represent aggregate model predictions,
+not verified identities or unique individuals.

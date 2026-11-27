@@ -1,3 +1,8 @@
-# Python dependencies for AI image detection
+# AI and computer vision
 ultralytics==8.4.218
 opencv-python==4.11.0.86
+
+# Dashboard and data visualization
+streamlit==1.50.0
+pandas==2.3.3
+plotly==7.1.0
