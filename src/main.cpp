@@ -689,7 +689,9 @@ void showMenu() {
               << "8. Delete authorized place\n"
               << "9. Add image to image library\n"
               << "10. Detect objects from saved images\n"
-              << "11. Exit\n"
+              << "11. Review AI detection summary\n"
+              << "12. View AI review history\n"
+              << "13. Exit\n"
               << "Choose an option: ";
 }
 
@@ -713,6 +715,20 @@ int main() {
         else if (choice == "9") addImage();
         else if (choice == "10") detectImage();
         else if (choice == "11") {
+            int status = std::system(
+                "./.venv/bin/python scripts/review_detection.py"
+            );
+            if (status != 0)
+                std::cerr << "Review failed. Check the error above.\n";
+        }
+        else if (choice == "12") {
+            int status = std::system(
+                "./.venv/bin/python scripts/view_review_history.py"
+            );
+            if (status != 0)
+                std::cerr << "History viewer failed.\n";
+        }
+        else if (choice == "13") {
             std::cout << "System closed. Thank you.\n";
             break;
         } else {

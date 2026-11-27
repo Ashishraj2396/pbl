@@ -41,3 +41,5 @@ README_backup.md
 /detection_output.json
 
 /detection_results/
+
+/review_history.jsonl

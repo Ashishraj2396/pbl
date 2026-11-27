@@ -252,3 +252,35 @@ not independently verified ground truth.
 
 The module processes individual approved sample
 images without identity recognition or tracking.
+
+## Human-Reviewed AI Detection Management
+
+The system provides a 13-option C++ menu.
+
+### New menu options
+
+- Option 11: Review AI detection summary.
+- Option 12: View AI review history.
+- Option 13: Exit.
+
+### Review features
+
+- JSON report validation.
+- Aggregate object detection summaries.
+- Human review decisions.
+- Accepted or needs-recheck status.
+- Cancellation without saving.
+- Timestamp-based local review history.
+- Invalid report handling.
+
+### New Python modules
+
+- scripts/review_detection.py
+- scripts/view_review_history.py
+
+Review records are stored locally in
+review_history.jsonl and excluded from Git.
+
+Manual CCTV events and AI review records
+remain separate. AI predictions do not establish
+identity, authorization, intent or suspicious behavior.
