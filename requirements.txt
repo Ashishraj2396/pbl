@@ -1,2 +1,3 @@
-# No third-party dependencies for the current C++17 prototype.
-# Future Python AI integration dependencies should be listed here after implementation.
+# Python dependencies for AI image detection
+ultralytics==8.4.218
+opencv-python==4.11.0.86

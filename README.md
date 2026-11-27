@@ -106,17 +106,14 @@ source .venv/bin/activate
 
 ### 2. Install Python dependencies
 
-If `requirements.txt` lists the required packages, install them with:
+Install the pinned dependencies:
 
-``` bash
+```bash
 python -m pip install -r requirements.txt
+python -m pip check
 ```
 
-If the YOLO script dependencies are not listed there, install:
-
-``` bash
-python -m pip install ultralytics opencv-python
-```
+The dependency versions are recorded in requirements.txt.
 
 ### 3. Add the YOLO model
 
@@ -219,3 +216,12 @@ compliance with applicable law and institutional policy.
 
 No license is specified yet. Add a license file only after the team
 agrees on the project's reuse and distribution terms.
+
+## Demo Data Setup
+
+For a fresh clone, initialize local records using synthetic examples:
+
+    cp -n data/examples/personnel.txt data/authorized_personnel.txt
+    cp -n data/examples/places.txt data/authorized_places.txt
+
+Private local records are excluded from Git tracking.

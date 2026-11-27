@@ -1,29 +1,39 @@
 # Compiled binaries
-cctv
-cctv.exe
-pbl
-pbl.exe
+/cctv
+/cctv.exe
+/pbl
+/pbl.exe
+/src/main
+/src/output/
 *.o
 *.out
-
-# Runtime data / logs
-events.csv
-
-# macOS / IDE
-.DS_Store
 *.dSYM/
-.vscode/
 
-# Python (for future AI integration)
-__pycache__/
-*.py[cod]
+# Python environment
 .venv/
 venv/
-.env
-.venv/
 __pycache__/
-*.pyc
-yolo11n.pt
-cctv
-detection_output.jpg
-data/images/
+*.py[cod]
+.env
+
+# AI model weights
+*.pt
+
+# Runtime files
+/events.csv
+/data/images/
+/detection_output.jpg
+
+# macOS and IDE files
+.DS_Store
+.vscode/
+
+# Backup files
+README_backup.md
+
+# Private local records
+/data/authorized_personnel.txt
+/data/authorized_places.txt
+
+# Generated detection result
+/result.jpg
