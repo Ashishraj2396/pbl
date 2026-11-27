@@ -675,6 +675,129 @@ void detectImage() {
     std::system(("open " + shellQuote(output)).c_str());
 }
 
+
+std::filesystem::path selectLocalFile(
+    const std::string& directory,
+    const std::vector<std::string>& extensions
+) {
+    namespace fs = std::filesystem;
+
+    std::vector<fs::path> files;
+    std::error_code error;
+
+    if (!fs::is_directory(directory, error)) {
+        std::cout << "Folder not available: " << directory << '\n';
+        return {};
+    }
+
+    fs::directory_iterator it(directory, error), end;
+
+    while (!error && it != end) {
+        std::error_code fileError;
+
+        if (it->is_regular_file(fileError)) {
+            std::string ext = normalize(
+                it->path().extension().string()
+            );
+
+            if (std::find(extensions.begin(), extensions.end(), ext)
+                != extensions.end()) {
+                files.push_back(it->path());
+            }
+        }
+
+        it.increment(error);
+    }
+
+    if (error) {
+        std::cerr << "Could not read folder.\n";
+        return {};
+    }
+
+    std::sort(files.begin(), files.end());
+
+    if (files.empty()) {
+        std::cout << "No supported files available.\n";
+        return {};
+    }
+
+    for (std::size_t i = 0; i < files.size(); ++i) {
+        std::cout << i + 1 << ". "
+                  << files[i].filename().string() << '\n';
+    }
+
+    std::cout << "Choose file number (0 to cancel): ";
+
+    std::string raw;
+    std::getline(std::cin, raw);
+    raw = trim(raw);
+
+    try {
+        std::size_t used = 0;
+        unsigned long index = std::stoul(raw, &used);
+
+        if (used != raw.size() || index > files.size()) {
+            std::cout << "Invalid selection.\n";
+            return {};
+        }
+
+        if (index == 0) return {};
+
+        return files[index - 1];
+
+    } catch (...) {
+        std::cout << "Invalid selection.\n";
+        return {};
+    }
+}
+
+void analyzeSampleVideo() {
+    std::cout << "\n======= SAMPLE VIDEOS =======\n";
+
+    const auto video = selectLocalFile(
+        "data/videos", {".mp4", ".mov", ".avi"}
+    );
+
+    if (video.empty()) return;
+
+    const std::string command =
+        "./.venv/bin/python scripts/yolo_video_demo.py --video "
+        + shellQuote(video.string())
+        + " --model yolo11n.pt --stride 10 --conf 0.50 --report";
+
+    std::cout << "Running sample video analysis...\n" << std::flush;
+
+    const int status = std::system(command.c_str());
+
+    if (status != 0) {
+        std::cerr << "Video analysis failed.\n";
+        return;
+    }
+
+    std::cout << "Video analysis completed successfully.\n";
+}
+
+void viewVideoReports() {
+    std::cout << "\n======= VIDEO REPORTS =======\n";
+
+    const auto report = selectLocalFile(
+        "video_results", {".json"}
+    );
+
+    if (report.empty()) return;
+
+    std::ifstream file(report);
+
+    if (!file) {
+        std::cerr << "Could not open report.\n";
+        return;
+    }
+
+    std::cout << "\n======= ANALYSIS REPORT =======\n";
+    std::cout << file.rdbuf();
+    std::cout << "\n===============================\n";
+}
+
 void showMenu() {
     std::cout << "\n========================================\n"
               << "   INTELLIGENT CCTV SURVEILLANCE SYSTEM\n"
@@ -691,7 +814,9 @@ void showMenu() {
               << "10. Detect objects from saved images\n"
               << "11. Review AI detection summary\n"
               << "12. View AI review history\n"
-              << "13. Exit\n"
+              << "13. Analyze sample video\n"
+              << "14. View video analysis reports\n"
+              << "15. Exit\n"
               << "Choose an option: ";
 }
 
@@ -728,11 +853,13 @@ int main() {
             if (status != 0)
                 std::cerr << "History viewer failed.\n";
         }
-        else if (choice == "13") {
+        else if (choice == "13") analyzeSampleVideo();
+        else if (choice == "14") viewVideoReports();
+        else if (choice == "15") {
             std::cout << "System closed. Thank you.\n";
             break;
         } else {
-            std::cout << "Invalid choice. Enter a number from 1 to 11.\n";
+            std::cout << "Invalid choice. Enter a number from 1 to 15.\n";
         }
     }
     return 0;

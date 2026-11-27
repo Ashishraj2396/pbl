@@ -43,3 +43,6 @@ README_backup.md
 /detection_results/
 
 /review_history.jsonl
+
+/data/videos/
+/video_results/

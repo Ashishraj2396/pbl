@@ -284,3 +284,52 @@ review_history.jsonl and excluded from Git.
 Manual CCTV events and AI review records
 remain separate. AI predictions do not establish
 identity, authorization, intent or suspicious behavior.
+
+## Recorded Video Analysis
+
+The system now provides a 15-option C++ menu.
+
+### New menu options
+
+- Option 13: Analyze sample video.
+- Option 14: View video analysis reports.
+- Option 15: Exit.
+
+### Video analysis features
+
+- OpenCV-based video reading.
+- MP4, MOV and AVI file selection.
+- Configurable frame sampling interval.
+- YOLO11n object detection on sampled frames.
+- Configurable confidence threshold through Python CLI.
+- Aggregate object category counts.
+- Video resolution and FPS reporting.
+- Processing performance statistics.
+- Timestamp-based JSON reports.
+- Input validation and error handling.
+
+### Default C++ settings
+
+- Frame sampling interval: 10.
+- Confidence threshold: 0.50.
+
+### New Python module
+
+scripts/yolo_video_demo.py
+
+### Local directories
+
+- data/videos/: Approved sample videos.
+- video_results/: Generated JSON reports.
+
+Both directories are excluded from Git tracking.
+
+### Limitations
+
+Aggregate detection counts may include repeated
+objects across multiple frames.
+
+The module does not perform identity recognition,
+individual tracking or live CCTV monitoring.
+
+Use only synthetic or approved demonstration videos.
