@@ -37,3 +37,7 @@ README_backup.md
 
 # Generated detection result
 /result.jpg
+
+/detection_output.json
+
+/detection_results/

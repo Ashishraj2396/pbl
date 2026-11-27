@@ -225,3 +225,30 @@ For a fresh clone, initialize local records using synthetic examples:
     cp -n data/examples/places.txt data/authorized_places.txt
 
 Private local records are excluded from Git tracking.
+
+## Advanced YOLO Image Detection
+
+The upgraded Python module supports:
+
+- Configurable confidence threshold.
+- Individual detection confidence scores.
+- Object category counting.
+- Structured JSON summary reports.
+- Timestamp-based archived results.
+- Improved error handling.
+
+### Optional command-line arguments
+
+- --conf: Minimum confidence between 0 and 1.
+  Default: 0.25.
+- --archive: Save unique image and JSON outputs
+  inside detection_results/.
+
+Generated results remain local and are excluded
+from Git tracking.
+
+Detection scores and counts are model predictions,
+not independently verified ground truth.
+
+The module processes individual approved sample
+images without identity recognition or tracking.
